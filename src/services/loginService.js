@@ -30,6 +30,8 @@ export function logout() {
   localStorage.setItem("isLogin", false);
   localStorage.setItem("userInfo", null);
   localStorage.setItem("cartData", null);
+  localStorage.setItem("order", null);
+  localStorage.setItem("orderDetailData", null);
   localStorage.setItem("orderData", null);
   // 重定位到首页
   window.location.href = "/";

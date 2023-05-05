@@ -3,32 +3,59 @@ import { Layout } from "antd";
 import { Typography, Col } from "antd";
 import { Table, Button } from "antd";
 import ColumnGroup from "antd/es/table/ColumnGroup";
+import { OrderDrawer } from "./OrderDrawer";
 
 const { Column } = Table;
 const { Content } = Layout;
 const { Title } = Typography;
 
 export class Order extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      orderData: [],
-    };
-  }
-
   componentDidMount() {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     fetch("http://localhost:8080/getOrdersByUserName?name=" + userInfo.name)
       .then((res) => res.json())
       .then((data) => {
         localStorage.setItem("orderData", JSON.stringify(data));
-        this.setState({
-          orderData: data,
-        });
+        this.forceUpdate();
       });
   }
 
+  showDrawer = (orderId) => {
+    const orderItems = fetch(
+      "http://localhost:8080/getOrderItemsByOrderId?orderId=" + orderId
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        return data;
+      });
+    let orderDetailData = [];
+    orderItems.then((data) => {
+      for (let i = 0; i < data.length; i++) {
+        fetch("http://localhost:8080/bookDetail?id=" + data[i].bookId)
+          .then((res) => res.json())
+          .then((json) => {
+            orderDetailData.push({
+              bookImage: json.image,
+              bookName: json.name,
+              bookPrice: json.price,
+              bookNum: data[i].bookNum,
+              pay: data[i].pay,
+              orderTime: data[i].orderTime,
+              orderStatus: data[i].orderStatus,
+            });
+            localStorage.setItem(
+              "orderDetailData",
+              JSON.stringify(orderDetailData)
+            );
+            localStorage.setItem("visible", true);
+            this.forceUpdate();
+          });
+      }
+    });
+  };
+
   render() {
+    const orderData = JSON.parse(localStorage.getItem("orderData"));
     return (
       <div>
         <Content>
@@ -36,7 +63,7 @@ export class Order extends React.Component {
             <Title>我的订单</Title>
           </Col>
         </Content>
-        <Table dataSource={this.state.orderData}>
+        <Table dataSource={orderData}>
           <Column
             title="收件人"
             dataIndex="userName"
@@ -84,17 +111,20 @@ export class Order extends React.Component {
           </ColumnGroup>
           <Column
             title="操作"
+            dataIndex="orderId"
             key="action"
             align="center"
             width="10%"
-            render={() => (
+            render={(orderId) => (
               <div>
-                <Button type="primary">详情</Button>
-                <Button type="danger">退货</Button>
+                <Button type="primary" onClick={() => this.showDrawer(orderId)}>
+                  详情
+                </Button>
               </div>
             )}
           />
         </Table>
+        <OrderDrawer />
       </div>
     );
   }

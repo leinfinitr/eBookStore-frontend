@@ -141,6 +141,7 @@ class HomeView extends React.Component {
           const modifyCartData = cartData.filter(
             (cart) => cartBuy.id !== cart.id
           );
+          this.handleDeleteFromCart(id);
           localStorage.setItem("cartData", JSON.stringify(modifyCartData));
           this.forceUpdate();
         } else {
