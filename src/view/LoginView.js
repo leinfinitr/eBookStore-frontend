@@ -7,7 +7,7 @@ class LoginView extends React.Component {
       <div className="login-page">
         <div className="login-container">
           <div className="login-box">
-            <h1 className="page-title">Login</h1>
+            <h1 className="page-title">登录</h1>
             <div className="login-content">
               <LoginForm />
             </div>

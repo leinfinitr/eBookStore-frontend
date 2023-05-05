@@ -1,6 +1,6 @@
 import React from "react";
 import { Descriptions, Button } from "antd";
-import { ShoppingCartOutlined, PayCircleOutlined } from "@ant-design/icons";
+import { ShoppingCartOutlined } from "@ant-design/icons";
 import { Col } from "antd";
 
 export class BookDetail extends React.Component {
@@ -89,7 +89,7 @@ export class BookDetail extends React.Component {
               加入购物车
             </Button>
 
-            <Button
+            {/* <Button
               type="danger"
               icon={<PayCircleOutlined />}
               size={"large"}
@@ -97,7 +97,7 @@ export class BookDetail extends React.Component {
               ghost
             >
               立即购买
-            </Button>
+            </Button> */}
           </div>
         </div>
       </Col>

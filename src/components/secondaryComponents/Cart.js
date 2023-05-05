@@ -9,6 +9,7 @@ const { Title } = Typography;
 
 export class Cart extends React.Component {
   render() {
+    const cartData = JSON.parse(localStorage.getItem("cartData"));
     return (
       <div>
         <Content>
@@ -16,10 +17,7 @@ export class Cart extends React.Component {
             <Title>我的购物车</Title>
           </Col>
         </Content>
-        <Table
-          dataSource={this.props.cartData}
-          rowKey={(record, index) => index}
-        >
+        <Table dataSource={cartData} rowKey={(record, index) => index}>
           <ColumnGroup title="书籍">
             <Column
               title="封面"
@@ -50,7 +48,7 @@ export class Cart extends React.Component {
               dataIndex="type"
               key="type"
               align="center"
-              width="10%"
+              width="15%"
             />
           </ColumnGroup>
           <Column

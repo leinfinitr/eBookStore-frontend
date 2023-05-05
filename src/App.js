@@ -4,18 +4,11 @@ import "./css/home.css";
 import "./css/bookDetail.css";
 import "./css/index.css";
 import "./css/login.css";
-import HomeView from "./view/HomeView";
-import LoginView from "./view/LoginView";
-import { Route, Routes } from "react-router-dom";
+import BasicRoute from "./Router";
 
 class App extends React.Component {
   render() {
-    return (
-      <Routes>
-        <Route path="/" element={<LoginView />} />
-        <Route path="/*" element={<HomeView />} />
-      </Routes>
-    );
+    return <BasicRoute />;
   }
 }
 

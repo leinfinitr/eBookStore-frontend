@@ -2,19 +2,22 @@ import React from "react";
 import { Form, Input, Button, Checkbox, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Navigate } from "react-router-dom";
+import { login } from "../services/loginService";
+import { getUserInfoByName } from "../services/userService";
 
 class LoginForm extends React.Component {
   state = {
     redirectToHome: false,
   };
 
-  handleLogin = (values) => {
+  handleLogin = async (values) => {
     const { username, password } = values;
-    const hardcodedUsername = "admin";
-    const hardcodedPassword = "password";
-
-    if (username === hardcodedUsername && password === hardcodedPassword) {
-      this.setState({ redirectToHome: true });
+    let res = await login(username, password);
+    if (res) {
+      await getUserInfoByName(username);
+      this.setState({
+        redirectToHome: true,
+      });
     } else {
       message.error("用户名或密码错误");
     }
@@ -50,7 +53,7 @@ class LoginForm extends React.Component {
           <Form.Item name="remember" valuePropName="checked" noStyle>
             <Checkbox>记住密码</Checkbox>
           </Form.Item>
-          <a className="login-form-forgot" href="">
+          <a className="login-form-forgot" href="www.baidu.com">
             忘记密码
           </a>
           <Button
@@ -60,7 +63,7 @@ class LoginForm extends React.Component {
           >
             登录
           </Button>
-          <a href="">注册</a>
+          <a href="www.baidu.com">注册</a>
         </Form.Item>
       </Form>
     );

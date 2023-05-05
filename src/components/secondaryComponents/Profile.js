@@ -1,27 +1,11 @@
 import React from "react";
 import { Descriptions, Col, Button } from "antd";
 import { EditOutlined, LogoutOutlined } from "@ant-design/icons";
+import { logout } from "../../services/loginService";
 
 export class Profile extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      userData: {},
-    };
-  }
-
-  componentDidMount() {
-    fetch("http://localhost:8080/getUser")
-      .then((res) => res.json())
-      .then((data) => {
-        this.setState({
-          userData: data,
-        });
-      });
-  }
-
   render() {
-    const info = this.state.userData;
+    const info = JSON.parse(localStorage.getItem("userInfo"));
 
     return (
       <Col>
@@ -44,9 +28,10 @@ export class Profile extends React.Component {
             icon={<LogoutOutlined />}
             size={"large"}
             style={{ marginLeft: "15%" }}
+            onClick={() => logout()}
             ghost
           >
-            <a href="/">退出登录</a>
+            退出登录
           </Button>
         </div>
       </Col>
