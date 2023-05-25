@@ -1,29 +1,29 @@
 .ant-carousel {
     margin-top: 0 !important;
-    margin-left:auto !important;
-    margin-right:auto !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
     margin-bottom: 40px !important;
 
 }
 
-.ant-carousel .slick-slide img{
+.ant-carousel .slick-slide img {
     width: 750px;
-    height:315px;
+    height: 315px;
     background: #364d79;
     margin: 0 auto;
     position: relative;
 }
 
-.ant-carousel{
+.ant-carousel {
     width: 750px;
-    height:315px;
+    height: 315px;
     margin: 0 auto;
     text-align: center;
 }
 
 .global-search-wrapper {
     margin: 40px auto 20px auto;
-    width:750px !important;
+    width: 750px !important;
     padding-right: 50px;
 }
 
@@ -59,14 +59,14 @@
 }
 
 
-.bookImg{
+.bookImg {
     height: 160px;
 }
 
-.ant-card-meta-title{
-    font-size:14px !important;
+.ant-card-meta-title {
+    font-size: 14px !important;
 }
 
-.ant-card-meta-description{
+.ant-card-meta-description {
     color: red !important;
 }

@@ -1,7 +1,8 @@
 {
-    "python.testing.pytestArgs": [
-        "src"
-    ],
-    "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
+  "python.testing.pytestArgs": ["src"],
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "files.associations": {
+    "thread": "cpp"
+  }
 }
