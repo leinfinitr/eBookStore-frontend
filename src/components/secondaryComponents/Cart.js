@@ -21,14 +21,14 @@ export class Cart extends React.Component {
                 <Content>
                     <Row>
                         <Col>
-                            <Title>我的购物车</Title>
+                            <Title level={2}>我的购物车</Title>
                         </Col>
                         <Col>
                             <Button
                                 style={{
                                     marginLeft: "80px",
                                     marginRight: "16px",
-                                    marginTop: "50px",
+                                    marginTop: "30px",
                                     backgroundColor: "#f0f2f5",
                                     color: "#333",
                                     border: "none"
@@ -40,7 +40,7 @@ export class Cart extends React.Component {
                         </Col>
                         <Col>
                             <Button
-                                style={{marginTop: "50px", backgroundColor: "#1890ff", color: "#fff", border: "none"}}
+                                style={{marginTop: "30px", backgroundColor: "#1890ff", color: "#fff", border: "none"}}
                                 onClick={() => this.props.handlePurchase(0)}
                             >
                                 全部下单

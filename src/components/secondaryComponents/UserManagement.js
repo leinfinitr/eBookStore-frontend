@@ -43,7 +43,7 @@ export class UserManagement extends React.Component {
             <div>
                 <Content>
                     <Col>
-                        <Title>用户管理</Title>
+                        <Title level={2}>用户管理</Title>
                     </Col>
                 </Content>
                 <Table dataSource={userData} rowKey={(record, index) => index}>

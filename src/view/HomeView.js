@@ -60,6 +60,7 @@ class HomeView extends React.Component {
                             type: json.type,
                             author: json.author,
                             price: json.price,
+                            inventory: json.inventory,
                             amount: data[i].bookNum,
                             image: json.image,
                         });
@@ -90,6 +91,7 @@ class HomeView extends React.Component {
                 type: book.type,
                 author: book.author,
                 price: book.price,
+                inventory: book.inventory,
                 amount: 1,
                 image: book.image,
             });
@@ -118,6 +120,11 @@ class HomeView extends React.Component {
             for (let i = 0; i < cartData.length; i++) {
                 dataIndex = i;
                 cartBuy = cartData[dataIndex];
+                // 如果书籍库存量不足，则购买失败并提示
+                if (cartBuy.amount > cartBuy.inventory) {
+                    message.error(cartBuy.name + "库存不足");
+                    return;
+                }
                 // 根据amount和price计算总价
                 pay = cartBuy.amount * cartBuy.price;
                 totalPay += pay;
@@ -133,6 +140,11 @@ class HomeView extends React.Component {
             // 根据id获取购物车中的书籍信息
             dataIndex = cartData.findIndex((cart) => cart.id === id);
             cartBuy = cartData[dataIndex];
+            // 如果书籍库存量不足，则购买失败并提示
+            if (cartBuy.amount > cartBuy.inventory) {
+                message.error(cartBuy.name + "库存不足");
+                return;
+            }
             // 根据amount和price计算总价
             pay = cartBuy.amount * cartBuy.price;
             totalPay += pay;

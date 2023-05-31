@@ -11,10 +11,8 @@ export class Home extends React.Component {
         super(props);
         this.state = {
             bookData: [],
-            search: false,
             searchData: [],
         };
-        this.handleSearch = this.handleSearch.bind(this);
         this.handleSearchData = this.handleSearchData.bind(this);
     }
 
@@ -24,13 +22,10 @@ export class Home extends React.Component {
             .then((data) => {
                 this.setState({
                     bookData: data,
+                    searchData: data,
                 });
             });
     };
-
-    handleSearch(search) {
-        this.setState(() => ({search: search}));
-    }
 
     handleSearchData(searchData) {
         this.setState(() => ({searchData: searchData}));
@@ -42,16 +37,11 @@ export class Home extends React.Component {
                 <Content>
                     <SearchBar
                         data={this.state.bookData}
-                        onSearch={this.handleSearch}
                         onSearchData={this.handleSearchData}
                     />
                     <BookCarousel/>
                     <BookList
-                        data={
-                            this.state.search === true
-                                ? this.state.searchData
-                                : this.state.bookData
-                        }
+                        data={this.state.searchData}
                     />
                 </Content>
             </div>

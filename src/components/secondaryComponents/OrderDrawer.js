@@ -26,17 +26,18 @@ export class OrderDrawer extends React.Component {
                         renderItem={(item) => (
                             <List.Item>
                                 <List.Item.Meta
-                                    avatar={<Avatar src={item.bookImage} size={64}/>}
-                                    title={item.bookName}
+                                    avatar={<Avatar src={item.image} size={64}/>}
+                                    title={item.name}
                                 />
-                                <List.Item.Meta title={`数量：${item.bookNum}`}/>
+                                <List.Item.Meta title={`数量：${item.num}`}/>
+                                <List.Item.Meta title={`单价：${item.price}`}/>
                                 <List.Item.Meta title={`实付款：${item.pay}`}/>
                                 <List.Item.Meta
-                                    title={`下单时间：${moment(item.orderTime).format(
+                                    title={`下单时间：${moment(item.time).format(
                                         "YYYY-MM-DD HH:mm:ss"
                                     )}`}
                                 />
-                                <List.Item.Meta title={`订单状态：${item.orderStatus}`}/>
+                                <List.Item.Meta title={`订单状态：${item.status}`}/>
                                 <Button type="primary" onClick={() => this.onClose()}>
                                     退货
                                 </Button>
