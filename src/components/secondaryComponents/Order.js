@@ -1,12 +1,14 @@
 import React from "react";
-import {Button, Col, Layout, Table, Typography} from "antd";
+import {Button, Col, DatePicker, Layout, Table, Typography} from "antd";
 import ColumnGroup from "antd/es/table/ColumnGroup";
 import {OrderDrawer} from "./OrderDrawer";
 import {SearchBar} from "../homeComponents/SearchBar";
+import locale from "antd/es/date-picker/locale/zh_CN";
 
 const {Column} = Table;
 const {Content} = Layout;
 const {Title} = Typography;
+const {RangePicker} = DatePicker;
 
 export class Order extends React.Component {
     constructor(props) {
@@ -21,7 +23,7 @@ export class Order extends React.Component {
 
     componentDidMount() {
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-        if(userInfo.type === "用户") {
+        if (userInfo.type === "用户") {
             fetch("http://localhost:8080/getOrdersByUserName?name=" + userInfo.name)
                 .then((res) => res.json())
                 .then((data) => {
@@ -91,6 +93,22 @@ export class Order extends React.Component {
             });
     };
 
+    // handle date change
+    handleDateChange = (dates) => {
+        if (dates && dates.length === 2) {
+            const startDate = dates[0];
+            const endDate = dates[1];
+            const orderData = JSON.parse(localStorage.getItem("orderData"));
+            const filerOrderData = orderData.filter((item) => {
+                const orderDate = new Date(item.time);
+                return orderDate >= startDate && orderDate <= endDate;
+            });
+            this.setState({
+                searchListData: filerOrderData,
+            });
+        }
+    }
+
     render() {
         const userType = JSON.parse(localStorage.getItem("userInfo")).type;
         const title = userType === "用户" ? "我的订单" : "所有订单";
@@ -104,6 +122,8 @@ export class Order extends React.Component {
                 data={this.state.orderItems}
                 onSearchData={this.handleSearchData}
             />
+            <RangePicker locale={locale} onChange={this.handleDateChange}
+                         style={{"marginBottom": "20px", "marginTop": "20px"}}/>
             <Table dataSource={this.state.searchListData}>
                 <Column
                     title="收件人"

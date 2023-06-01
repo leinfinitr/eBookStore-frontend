@@ -9,7 +9,7 @@ export class Cart extends React.Component {
 
     emptyCart = () => {
         const cartData = JSON.parse(localStorage.getItem("cartData"));
-        for(let i = 0; i < cartData.length; i++) {
+        for (let i = 0; i < cartData.length; i++) {
             this.props.handleDeleteFromCart(cartData[i].id);
         }
     }
@@ -33,7 +33,9 @@ export class Cart extends React.Component {
                                     color: "#333",
                                     border: "none"
                                 }}
-                                onClick={() => {this.emptyCart()}}
+                                onClick={() => {
+                                    this.emptyCart()
+                                }}
                             >
                                 清空购物车
                             </Button>

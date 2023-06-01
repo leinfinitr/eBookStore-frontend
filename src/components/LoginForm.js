@@ -1,9 +1,9 @@
-import React, { useRef, useState } from "react";
-import { Button, Checkbox, Form, Input, message, Modal } from "antd";
-import { UserOutlined } from "@ant-design/icons";
-import { Navigate } from "react-router-dom";
-import { login } from "../services/loginService";
-import { getUserInfoByName, registerUser } from "../services/userService";
+import React, {useRef, useState} from "react";
+import {Button, Checkbox, Form, Input, message, Modal} from "antd";
+import {UserOutlined} from "@ant-design/icons";
+import {Navigate} from "react-router-dom";
+import {login} from "../services/loginService";
+import {getUserInfoByName, registerUser} from "../services/userService";
 
 const LoginForm = () => {
     const [redirectToHome, setRedirectToHome] = useState(false);
@@ -26,7 +26,7 @@ const LoginForm = () => {
     };
 
     const handleLogin = async (values) => {
-        const { username, password } = values;
+        const {username, password} = values;
         let res = await login(username, password);
         if (res.status === 200) {
             await getUserInfoByName(username);
@@ -55,21 +55,21 @@ const LoginForm = () => {
             <Form className="login-form" onFinish={handleLogin}>
                 <Form.Item
                     name="username"
-                    rules={[{ required: true, message: "请输入用户名" }]}
+                    rules={[{required: true, message: "请输入用户名"}]}
                 >
                     <Input
-                        prefix={<UserOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+                        prefix={<UserOutlined style={{color: "rgba(0,0,0,.25)"}}/>}
                         placeholder="用户名"
                     />
                 </Form.Item>
                 <Form.Item
                     name="password"
                     rules={[
-                        { required: true, message: "请输入密码" },
-                        { min: 6, message: "密码不能小于6个字符" },
+                        {required: true, message: "请输入密码"},
+                        {min: 6, message: "密码不能小于6个字符"},
                     ]}
                 >
-                    <Input.Password placeholder="密码" />
+                    <Input.Password placeholder="密码"/>
                 </Form.Item>
                 <Form.Item>
                     <Form.Item name="remember" valuePropName="checked" noStyle>
@@ -121,27 +121,27 @@ const LoginForm = () => {
                 >
                     <Form.Item
                         name="username"
-                        rules={[{ required: true, message: "请输入用户名" }]}
+                        rules={[{required: true, message: "请输入用户名"}]}
                     >
-                        <Input placeholder="用户名" />
+                        <Input placeholder="用户名"/>
                     </Form.Item>
 
                     <Form.Item
                         name="password"
                         rules={[
-                            { required: true, message: "请输入密码" },
-                            { min: 6, message: "密码不能小于6个字符" },
+                            {required: true, message: "请输入密码"},
+                            {min: 6, message: "密码不能小于6个字符"},
                         ]}
                     >
-                        <Input.Password placeholder="密码" />
+                        <Input.Password placeholder="密码"/>
                     </Form.Item>
 
                     <Form.Item
                         name="confirmPassword"
                         dependencies={["password"]}
                         rules={[
-                            { required: true, message: "请再次输入密码" },
-                            ({ getFieldValue }) => ({
+                            {required: true, message: "请再次输入密码"},
+                            ({getFieldValue}) => ({
                                 validator(rule, value) {
                                     if (!value || getFieldValue("password") === value) {
                                         return Promise.resolve();
@@ -151,14 +151,14 @@ const LoginForm = () => {
                             }),
                         ]}
                     >
-                        <Input.Password placeholder="请再次输入密码" />
+                        <Input.Password placeholder="请再次输入密码"/>
                     </Form.Item>
 
                     <Form.Item
                         name="nickname"
-                        rules={[{ required: true, message: "请输入昵称" }]}
+                        rules={[{required: true, message: "请输入昵称"}]}
                     >
-                        <Input placeholder="昵称" />
+                        <Input placeholder="昵称"/>
                     </Form.Item>
 
                     <Form.Item
@@ -174,7 +174,7 @@ const LoginForm = () => {
                             },
                         ]}
                     >
-                        <Input placeholder="手机号码" />
+                        <Input placeholder="手机号码"/>
                     </Form.Item>
 
                     <Form.Item
@@ -190,29 +190,29 @@ const LoginForm = () => {
                             },
                         ]}
                     >
-                        <Input placeholder="邮箱" />
+                        <Input placeholder="邮箱"/>
                     </Form.Item>
                     <Form.Item
                         name="nation"
-                        rules={[{ required: true, message: "请输入国籍" }]}
+                        rules={[{required: true, message: "请输入国籍"}]}
                     >
-                        <Input placeholder="国籍" />
+                        <Input placeholder="国籍"/>
                     </Form.Item>
                     <Form.Item
                         name="province"
-                        rules={[{ required: true, message: "请输入省/市" }]}
+                        rules={[{required: true, message: "请输入省/市"}]}
                     >
-                        <Input placeholder="省份" />
+                        <Input placeholder="省份"/>
                     </Form.Item>
                     <Form.Item
                         name="address"
-                        rules={[{ required: true, message: "请输入详细地址" }]}
+                        rules={[{required: true, message: "请输入详细地址"}]}
                     >
-                        <Input placeholder="详细地址" />
+                        <Input placeholder="详细地址"/>
                     </Form.Item>
                 </Form>
             </Modal>
-            {redirectToHome ? <Navigate to="/home" /> : null}
+            {redirectToHome ? <Navigate to="/home"/> : null}
         </>
     );
 };

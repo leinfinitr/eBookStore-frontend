@@ -42,8 +42,7 @@ export const BookDetail = (props) => {
                     setShowModal(false);
                     message.success("修改成功");
                     window.location.reload();
-                }
-                else {
+                } else {
                     message.error("修改失败");
                 }
             })
@@ -63,8 +62,7 @@ export const BookDetail = (props) => {
                     setShowAddModal(false);
                     message.success("添加成功");
                     window.location.reload();
-                }
-                else {
+                } else {
                     message.error("添加失败");
                 }
             })
@@ -83,6 +81,9 @@ export const BookDetail = (props) => {
                     <Descriptions>
                         <Descriptions.Item className={"title"} span={3}>
                             {bookInfo.name}
+                        </Descriptions.Item>
+                        <Descriptions.Item label={"ISBN"} span={3}>
+                            {bookInfo.isbn}
                         </Descriptions.Item>
                         <Descriptions.Item label={"作者"} span={3}>
                             {bookInfo.author}
@@ -195,12 +196,12 @@ export const BookDetail = (props) => {
             >
                 <Form form={form} name="updateBookForm" onFinish={updateBook}
                       ref={formRef}
-                      validateMessages={{ required: "请输入 ${label}!" }}>
+                      validateMessages={{required: "请输入 ${label}!"}}>
                     <Form.Item label="书籍ID" name="id">
                         <Input disabled/>
                     </Form.Item>
                     <Form.Item label="书籍ISBN" name="isbn"
-                                 rules={[{required: true, message: "请输入书籍ISBN!"}]}>
+                               rules={[{required: true, message: "请输入书籍ISBN!"}]}>
                         <Input/>
                     </Form.Item>
                     <Form.Item label="书籍名称" name="name"
@@ -253,10 +254,10 @@ export const BookDetail = (props) => {
                 }}
             >
                 <Form form={addForm} name="addBookForm" onFinish={addBook}
-                      validateMessages={{ required: "请输入 ${label}!" }}
+                      validateMessages={{required: "请输入 ${label}!"}}
                       ref={addFormRef}>
                     <Form.Item label="书籍ISBN" name="isbn"
-                                 rules={[{required: true, message: "请输入书籍ISBN!"}]}>
+                               rules={[{required: true, message: "请输入书籍ISBN!"}]}>
                         <Input/>
                     </Form.Item>
                     <Form.Item label="书籍名称" name="name"

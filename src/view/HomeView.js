@@ -10,6 +10,8 @@ import {Profile} from "../components/secondaryComponents/Profile";
 import {BookDetail} from "../components/secondaryComponents/BookDetail";
 import {UserManagement} from "../components/secondaryComponents/UserManagement";
 import * as cartService from "../services/cartService";
+import {OrderHistory} from "../components/secondaryComponents/OrderHistory";
+import {OrderStatistics} from "../components/secondaryComponents/OrderStatistics";
 
 const {Header, Sider, Content} = Layout;
 
@@ -17,10 +19,6 @@ class HomeView extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            userData: {},
-            bookData: [],
-        };
         this.handleAddToCart = this.handleAddToCart.bind(this);
         this.handlePurchase = this.handlePurchase.bind(this);
         this.handleDeleteFromCart = this.handleDeleteFromCart.bind(this);
@@ -30,15 +28,10 @@ class HomeView extends React.Component {
 
     componentDidMount = () => {
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-        this.setState({
-            userData: userInfo,
-        });
         fetch("http://localhost:8080/books")
             .then((res) => res.json())
             .then((data) => {
-                this.setState({
-                    bookData: data,
-                });
+                localStorage.setItem("bookData", JSON.stringify(data));
             });
         const cart = fetch(
             "http://localhost:8080/getCartByUserId?userId=" + userInfo.userId
@@ -48,6 +41,7 @@ class HomeView extends React.Component {
                 return data;
             });
         let cartData = [];
+        localStorage.setItem("cartData", JSON.stringify(cartData));
         cart.then((data) => {
             for (let i = 0; i < data.length; i++) {
                 fetch("http://localhost:8080/bookDetail?id=" + data[i].bookId)
@@ -73,13 +67,15 @@ class HomeView extends React.Component {
     // 点击书籍详情页中的加入购物车按钮
     // 根据书籍id从bookData中获取书籍信息，并且添加到购物车
     handleAddToCart = (id) => {
-        const book = this.state.bookData.find((book) => book.id === id);
+        const bookData = JSON.parse(localStorage.getItem("bookData"));
+        const book = bookData.find((book) => book.id === id);
         const cartData = JSON.parse(localStorage.getItem("cartData"));
         const cart = cartData.find((cart) => cart.name === book.name);
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
         if (cart) {
             cartData[cartData.indexOf(cart)].amount += 1;
             cartService.modifyCart({
-                userId: this.state.userData.userId,
+                userId: userInfo.userId,
                 bookId: book.id,
                 bookNum: cartData[cartData.indexOf(cart)].amount,
             });
@@ -96,7 +92,7 @@ class HomeView extends React.Component {
                 image: book.image,
             });
             cartService.addCart({
-                userId: this.state.userData.userId,
+                userId: userInfo.userId,
                 bookId: book.id,
                 bookNum: 1,
             });
@@ -108,7 +104,9 @@ class HomeView extends React.Component {
     // 点击购物车中的购买按钮
     // 根据购物车中的书籍信息，向后端发送请求，生成订单
     handlePurchase = (id) => {
+        const bookData = JSON.parse(localStorage.getItem("bookData"));
         const cartData = JSON.parse(localStorage.getItem("cartData"));
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
         let dataIndex = 0;  // 书籍在购物车中的索引
         let cartBuy = {};   // 购买的书籍信息
         let pay = 0;        // 每个订单项购买的总价
@@ -121,7 +119,8 @@ class HomeView extends React.Component {
                 dataIndex = i;
                 cartBuy = cartData[dataIndex];
                 // 如果书籍库存量不足，则购买失败并提示
-                if (cartBuy.amount > cartBuy.inventory) {
+                const book = bookData.find((book) => book.id === cartBuy.id);
+                if (cartBuy.amount > book.inventory) {
                     message.error(cartBuy.name + "库存不足");
                     return;
                 }
@@ -130,18 +129,21 @@ class HomeView extends React.Component {
                 totalPay += pay;
                 orderItem = {
                     bookId: cartBuy.id,
+                    bookName: cartBuy.name,
+                    bookPrice: cartBuy.price,
+                    bookImage: cartBuy.image,
                     bookNum: cartBuy.amount,
                     pay: pay,
                 };
                 orderList.push(orderItem);
             }
-        }
-        else {
+        } else {
             // 根据id获取购物车中的书籍信息
             dataIndex = cartData.findIndex((cart) => cart.id === id);
             cartBuy = cartData[dataIndex];
             // 如果书籍库存量不足，则购买失败并提示
-            if (cartBuy.amount > cartBuy.inventory) {
+            const book = bookData.find((book) => book.id === cartBuy.id);
+            if (cartBuy.amount > book.inventory) {
                 message.error(cartBuy.name + "库存不足");
                 return;
             }
@@ -150,6 +152,9 @@ class HomeView extends React.Component {
             totalPay += pay;
             orderItem = {
                 bookId: cartBuy.id,
+                bookName: cartBuy.name,
+                bookPrice: cartBuy.price,
+                bookImage: cartBuy.image,
                 bookNum: cartBuy.amount,
                 pay: pay,
             };
@@ -157,7 +162,7 @@ class HomeView extends React.Component {
         }
 
         const order = {
-            userName: this.state.userData.name,
+            userName: userInfo.name,
             totalPrice: totalPay,
             orderlist: orderList,
         };
@@ -173,19 +178,19 @@ class HomeView extends React.Component {
             .then((data) => {
                 if (data.status === 200) {
                     message.success("购买成功");
-                    if(id === 0) {
-                        for(let i = 0; i < cartData.length; i++) {
+                    if (id === 0) {
+                        for (let i = 0; i < cartData.length; i++) {
                             this.handleDeleteFromCart(cartData[i].id);
                         }
-                    }
-                    else {
-                        const modifyCartData = cartData.filter(
-                            (cart) => cartBuy.id !== cart.id
-                        );
+                    } else {
                         this.handleDeleteFromCart(id);
-                        localStorage.setItem("cartData", JSON.stringify(modifyCartData));
                     }
                     this.forceUpdate();
+                    fetch("http://localhost:8080/books")
+                        .then((res) => res.json())
+                        .then((data) => {
+                            localStorage.setItem("bookData", JSON.stringify(data));
+                        });
                 } else {
                     message.error("购买失败");
                 }
@@ -195,12 +200,13 @@ class HomeView extends React.Component {
     // 点击购物车中的删除按钮
     // 根据书籍id从购物车中删除书籍
     handleDeleteFromCart = (id) => {
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
         const cartData = JSON.parse(localStorage.getItem("cartData"));
         const cart = cartData.find((cart) => cart.id === id);
         if (cart) {
             cartData.splice(cartData.indexOf(cart), 1);
             cartService.deleteCart({
-                userId: this.state.userData.userId,
+                userId: userInfo.userId,
                 bookId: cart.id,
             });
             localStorage.setItem("cartData", JSON.stringify(cartData));
@@ -210,11 +216,12 @@ class HomeView extends React.Component {
 
     // 点击购物车中的添加按钮，书籍数量加一
     handleAddAmount = (id) => {
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
         const cartData = JSON.parse(localStorage.getItem("cartData"));
         const cart = cartData.find((cart) => cart.id === id);
         if (cart) {
             cartService.modifyCart({
-                userId: this.state.userData.userId,
+                userId: userInfo.userId,
                 bookId: cart.id,
                 bookNum: cart.amount + 1,
             });
@@ -226,6 +233,7 @@ class HomeView extends React.Component {
 
     // 点击购物车中的减少按钮，书籍数量减一
     handleDecreaseAmount = (id) => {
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
         const cartData = JSON.parse(localStorage.getItem("cartData"));
         const cart = cartData.find((cart) => cart.id === id);
         if (cart) {
@@ -235,7 +243,7 @@ class HomeView extends React.Component {
                 return;
             }
             cartService.modifyCart({
-                userId: this.state.userData.userId,
+                userId: userInfo.userId,
                 bookId: cart.id,
                 bookNum: amount,
             });
@@ -284,6 +292,8 @@ class HomeView extends React.Component {
                                     }
                                 />
                                 <Route path="/userManagement" element={<UserManagement/>}/>
+                                <Route path="/orderHistory" element={<OrderHistory/>}/>
+                                <Route path="/OrderStatistics" element={<OrderStatistics/>}/>
                             </Routes>
                         </div>
                     </Content>
