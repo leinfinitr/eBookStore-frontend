@@ -65,7 +65,7 @@ export const Profile = () => {
                     icon={<LogoutOutlined/>}
                     size={"large"}
                     style={{marginLeft: "15%"}}
-                    onClick={() => logout()}
+                    onClick={() => logout(info.name)}
                     ghost
                 >
                     退出登录

@@ -5,15 +5,15 @@ import {logout} from "../services/loginService";
 
 export class UserAvatar extends React.Component {
     render() {
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
         const menu = (
             <Menu>
                 <Menu.Item>
-                    <Button onClick={() => logout()}>退出登录</Button>
+                    <Button onClick={() => logout(userInfo.name)}>退出登录</Button>
                 </Menu.Item>
             </Menu>
         );
-
-        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
         return (
             <div id="avatar">
