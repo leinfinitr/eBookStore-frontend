@@ -28,6 +28,20 @@ class HomeView extends React.Component {
 
     componentDidMount = () => {
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+        // 建立 WebSocket 连接，用于接收下订单处理结果
+        this.socket = new WebSocket("ws://localhost:8080/transfer/" + userInfo.name);
+        this.socket.onopen = () => {
+            console.log("连接成功");
+        };
+        this.socket.onmessage = (e) => {
+            console.log("收到消息", e);
+            message.info(e.data)
+        };
+        this.socket.onclose = () => {
+            console.log("连接关闭");
+        };
+
         fetch("http://localhost:8080/books")
             .then((res) => res.json())
             .then((data) => {
@@ -177,7 +191,6 @@ class HomeView extends React.Component {
             .then((res) => res.json())
             .then((data) => {
                 if (data.status === 200) {
-                    message.success("购买成功");
                     if (id === 0) {
                         for (let i = 0; i < cartData.length; i++) {
                             this.handleDeleteFromCart(cartData[i].id);
@@ -191,8 +204,6 @@ class HomeView extends React.Component {
                         .then((data) => {
                             localStorage.setItem("bookData", JSON.stringify(data));
                         });
-                } else {
-                    message.error("购买失败");
                 }
             });
     };
