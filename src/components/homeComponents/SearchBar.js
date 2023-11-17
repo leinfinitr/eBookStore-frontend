@@ -28,6 +28,16 @@ export class SearchBar extends React.Component {
                 this.state.searchData.push(item);
             }
         });
+        // 根据 type 进行搜索
+        fetch("http://localhost:8080/searchBookByLabel?name=" + this.state.input)
+            .then((res) => res.json())
+            .then((data) => {
+                data.map((item) => {
+                    this.state.searchData.push(item);
+                });
+                this.handleSearchData(this.state.searchData);
+            });
+
         this.handleSearchData(this.state.searchData);
     };
 
