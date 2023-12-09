@@ -28,6 +28,33 @@ export class SearchBar extends React.Component {
                 this.state.searchData.push(item);
             }
         });
+        // 为了测试 GraphQL 的查询语句
+        // const query = `query bookDetails($name: String) {
+        //             bookByName(name: $name) {
+        //                 id
+        //                 isbn
+        //                 name
+        //                 type
+        //                 author
+        //                 price
+        //                 description
+        //                 inventory
+        //                 image
+        //             }
+        //         }`;
+        // fetch('http://localhost:8080/graphql', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Accept': 'application/json',
+        //     },
+        //     body: JSON.stringify({query: query, variables: {name: this.state.input}}),
+        // })
+        //     .then((res) => res.json())
+        //     .then((data) => {
+        //         localStorage.setItem("TestGraphQLBookData", JSON.stringify(data));
+        //     });
+
         // 根据 type 进行搜索
         fetch("http://localhost:8080/searchBookByLabel?name=" + this.state.input)
             .then((res) => res.json())
